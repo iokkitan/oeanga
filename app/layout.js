@@ -1,5 +1,7 @@
-import { Providers } from "./components/providers";
+import GlblProviders from "./components/GlblProviders";
+import { fonts } from "./isomorphic/fonts";
 
+import "./globals.css";
 
 export const metadata = {
   title: "Create Next App",
@@ -8,9 +10,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body >
-        <Providers>{children}</Providers>
+    <html
+      lang="en"
+      className={[fonts.roboto.variable, fonts.rubik.variable].join(" ")}
+    >
+      <body>
+        <GlblProviders>{children}</GlblProviders>
       </body>
     </html>
   );

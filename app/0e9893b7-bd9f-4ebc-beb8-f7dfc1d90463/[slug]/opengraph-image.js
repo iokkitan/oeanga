@@ -1,9 +1,9 @@
 import { decode } from "js-base64";
 import { ImageResponse } from "next/og";
 import * as React from "react";
-import CardUITailwind from "../components/CardUITailwind";
-import { parseJson } from "../isomorphic/utils";
-import { all } from "../ttfs/_googlefonts";
+import { parseJson } from "../../isomorphic/utils";
+import { all } from "../../ttfs/_googlefonts";
+import CardUITailwind from "../CardUITailwind";
 
 export const size = {
   width: 1200,

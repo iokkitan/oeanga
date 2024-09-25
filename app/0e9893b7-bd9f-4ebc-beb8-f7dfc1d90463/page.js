@@ -19,7 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { encode } from "js-base64";
 import { atom, useAtom, useAtomValue, createStore, Provider } from "jotai";
 import * as React from "react";
-import CardUITailwind from "./components/CardUITailwind";
+import CardUITailwind from "./CardUITailwind";
 
 const fontFamilyListAtom = atom(async (get) => {
   const response = await fetch(`/ttfs`);
@@ -252,6 +252,7 @@ function TextField({ label, atom }) {
 }
 
 function Content() {
+  const pathname = usePathname();
   const textList = useAtomValue(textListAtom);
   const styleList = useAtomValue(styleListAtom);
   const cardUiChakraProps = useAtomValue(cardUiChakraPropsAtom);
@@ -274,7 +275,7 @@ function Content() {
         </Box>
         <FormControl>
           <FormLabel>Open Graph Image URI</FormLabel>
-          <Textarea value={opengraphImageUri} onChange={_.noop} />
+          <Textarea value={pathname + opengraphImageUri} onChange={_.noop} />
         </FormControl>
         <Box pos="relative">
           <Box
@@ -286,7 +287,7 @@ function Content() {
             transform="scale(50%)"
             transformOrigin="0 0"
           >
-            <Image src={opengraphImageUri} />
+            <Image src={pathname + opengraphImageUri} />
           </Box>
         </Box>
       </VStack>

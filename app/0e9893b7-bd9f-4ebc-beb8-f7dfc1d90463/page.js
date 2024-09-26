@@ -1,4 +1,5 @@
 import { encode } from "js-base64";
+import DraftPage from "./DraftPage";
 
 export async function generateMetadata({ params, searchParams }) {
   const cardDraftVersionProps = {
@@ -10,12 +11,24 @@ export async function generateMetadata({ params, searchParams }) {
     text: searchParams.text,
     footerText: searchParams.footerText,
   };
-  const slug = encodeURIComponent(encode(JSON.stringify(cardDraftVersionProps)));
+  const slug = encodeURIComponent(
+    encode(JSON.stringify(cardDraftVersionProps))
+  );
   return {
+    title: "DraftPage",
     openGraph: {
-      images: [`/0e9893b7-bd9f-4ebc-beb8-f7dfc1d90463/${slug}/opengraph-image`],
+      type: "website",
+      images: [
+        {
+          url: `/0e9893b7-bd9f-4ebc-beb8-f7dfc1d90463/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+        },
+      ],
     },
   };
 }
 
-export { default } from "./DraftPage";
+export default function RSCPage(props) {
+  return <DraftPage {...props} />;
+}

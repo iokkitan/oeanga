@@ -59,7 +59,9 @@ const cardBodyTwAtom = atom("flex flex-row");
 const headingTwAtom = atom(
   "basis-2/5 border-r-2 border-gray-200 pr-4 text-9xl font-bold text-gray-900 text-center"
 );
-const stackTwAtom = atom("grow flex flex-col pl-4 text-2xl text-left text-wrap break-words");
+const stackTwAtom = atom(
+  "grow flex flex-col pl-4 text-2xl text-left text-wrap break-words"
+);
 const textTwAtom = atom("py-1 text-wrap break-words text-gray-600");
 const cardFooterTwAtom = atom(
   "flex flex-col mt-10 border-t border-gray-200 pt-10"
@@ -306,6 +308,24 @@ function Content() {
       </VStack>
     </SimpleGrid>
   );
+}
+
+export async function generateMetadata({ params, searchParams }) {
+  const cardUiChakraProps = get({
+    fontFamily: searchParams.fontFamily || fontFamilyAtom.init,
+    fontVariant: searchParams.fontVariant || fontVariantAtom.init,
+    // ------------------------
+    imageUri: searchParams.imageUri,
+    heading: searchParams.heading,
+    text: searchParams.text,
+    footerText: searchParams.footerText,
+  });
+  const slug = encodeURIComponent(encode(JSON.stringify(cardUiChakraProps)));
+  return {
+    openGraph: {
+      images: [`/0e9893b7-bd9f-4ebc-beb8-f7dfc1d90463/${slug}/opengraph-image`],
+    },
+  };
 }
 
 export default function PageHome({ searchParams }) {

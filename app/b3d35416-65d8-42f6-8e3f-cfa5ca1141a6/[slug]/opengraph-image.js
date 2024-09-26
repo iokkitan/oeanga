@@ -46,7 +46,6 @@ async function prepareFonts({ fontFamily, fontVariant }) {
 
 export default async function HomeImage({ params: { slug } }) {
   const cardUiTaiwindProps = parseJson(decode(decodeURIComponent(slug)));
-  console.log(cardUiTaiwindProps);
 
   return new ImageResponse(
     toTwJsx(CardUITailwind(cardUiTaiwindProps)),

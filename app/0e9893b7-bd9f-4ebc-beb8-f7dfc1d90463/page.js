@@ -19,11 +19,18 @@ import { usePathname, useRouter } from "next/navigation";
 import { encode } from "js-base64";
 import { atom, useAtom, useAtomValue, createStore, Provider } from "jotai";
 import * as React from "react";
-import CardUITailwind from "./CardUITailwind";
+import CardDraftVersion from "./CardDraftVersion";
+
+const items =
+  "undefined" === typeof window
+    ? Promise.resolve([])
+    : (async () => {
+        const response = await fetch(`/ttfs`);
+        const { items } = await response.json();
+        return items;
+      })();
 
 const fontFamilyListAtom = atom(async (get) => {
-  const response = await fetch(`/ttfs`);
-  const { items } = await response.json();
   return items;
 });
 
@@ -46,16 +53,18 @@ const textAtom = atom(
 const footerTextAtom = atom(`Buy now / Add to cart.`);
 // ------------------------
 const cardTwAtom = atom(
-  "w-full h-full flex flex-col border b-2 rounded-lg p-4 bg-white box-shadow-md"
+  "w-full h-full flex flex-col p-4 bg-white box-shadow-md"
 );
-const cardBodyTwAtom = atom("flex flex-col");
-const imageTwAtom = atom("h-16");
-const stackTwAtom = atom("flex flex-col space-y-4 mt-10 text-left");
-const headingTwAtom = atom("text-6xl font-bold text-gray-900");
-const textTwAtom = atom("text-lg text-gray-600");
+const cardBodyTwAtom = atom("flex flex-row");
+const headingTwAtom = atom(
+  "basis-2/5 border-r-2 border-gray-200 pr-4 text-9xl font-bold text-gray-900 text-center"
+);
+const stackTwAtom = atom("grow flex flex-col pl-4 text-2xl text-left text-wrap break-words");
+const textTwAtom = atom("py-1 text-wrap break-words text-gray-600");
 const cardFooterTwAtom = atom(
   "flex flex-col mt-10 border-t border-gray-200 pt-10"
 );
+const imageTwAtom = atom("h-16");
 const footerTextTwAtom = atom("text-md text-teal-500");
 
 const textListAtom = atom([
@@ -265,13 +274,16 @@ function Content() {
         {textList.map(({ key, ...restProps }) => (
           <TextField key={key} {...restProps} />
         ))}
-        {styleList.map(({ key, ...restProps }) => (
-          <TextField key={key} {...restProps} />
-        ))}
       </VStack>
       <VStack spacing={6} align="flex-start">
-        <Box w="full" maxH="630px">
-          <CardUITailwind {...cardUiChakraProps} />
+        <Box
+          w="full"
+          maxH="630px"
+          border="1px solid"
+          rounded="lg"
+          overflow="hidden"
+        >
+          <CardDraftVersion {...cardUiChakraProps} />
         </Box>
         <FormControl>
           <FormLabel>Open Graph Image URI</FormLabel>
@@ -281,7 +293,8 @@ function Content() {
           <Box
             pos="absolute"
             border="2px solid"
-            rounded="md"
+            rounded="lg"
+            overflow="hidden"
             minW="1204px"
             minH="634px"
             transform="scale(50%)"

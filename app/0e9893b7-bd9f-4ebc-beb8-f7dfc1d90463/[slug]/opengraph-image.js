@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 import * as React from "react";
 import { parseJson } from "../../isomorphic/utils";
 import { all } from "../../ttfs/_googlefonts";
-import CardUITailwind from "../CardUITailwind";
+import CardDraftVersion from "../CardDraftVersion";
 
 export const size = {
   width: 1200,
@@ -46,10 +46,9 @@ async function prepareFonts({ fontFamily, fontVariant }) {
 
 export default async function HomeImage({ params: { slug } }) {
   const cardUiTaiwindProps = parseJson(decode(decodeURIComponent(slug)));
-  console.log(cardUiTaiwindProps);
 
   return new ImageResponse(
-    toTwJsx(CardUITailwind(cardUiTaiwindProps)),
+    toTwJsx(CardDraftVersion(cardUiTaiwindProps)),
     /**
      * @see https://github.com/vercel/satori
      */

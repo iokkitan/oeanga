@@ -33,6 +33,7 @@ export default function CardDraftVersion({
   const headingTw = `w-5/12 border-r-2 border-gray-200 pr-6 font-bold text-gray-900 text-center text-${getTextSize(
     heading
   )}`;
+  const lineTw = `text-gray-600 text-${getTextSize(text)}`;
 
   return (
     <div className="w-full h-full flex flex-col p-8 bg-white">
@@ -41,7 +42,7 @@ export default function CardDraftVersion({
         <div className="w-7/12 flex flex-col pl-6 items-stretch">
           {text.split("\n").map((line, index) => (
             <React.Fragment key={index}>
-              <span className={`py-2 text-gray-600 text-${getTextSize(line)}`}>{line}</span>
+              <span className={lineTw}>{line}</span>
             </React.Fragment>
           ))}
         </div>

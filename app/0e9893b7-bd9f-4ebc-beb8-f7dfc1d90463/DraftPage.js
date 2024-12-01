@@ -22,7 +22,7 @@ import * as React from "react";
 import CardDraftVersion from "./CardDraftVersion";
 
 const fontFamilyListAtom = atom();
-const fontFamilyAtom = atom("Noto Sans");
+const fontFamilyAtom = atom("Gentium Book Plus");
 const fontVariantListAtom = atom((get) => {
   const fontFamilyList = get(fontFamilyListAtom);
   const fontFamily = get(fontFamilyAtom);

@@ -1,5 +1,6 @@
 import { encode } from "js-base64";
 import DraftPage from "./DraftPage";
+import { all } from "../_server-only/googfont";
 
 export async function generateMetadata({ params, searchParams }) {
   const cardDraftVersionProps = {
@@ -29,6 +30,7 @@ export async function generateMetadata({ params, searchParams }) {
   };
 }
 
-export default function RSCPage(props) {
-  return <DraftPage {...props} />;
+export default async function RSCPage(props) {
+  const googfontAll = await all();
+  return <DraftPage googfontAll={googfontAll} {...props} />;
 }

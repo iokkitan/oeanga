@@ -15,28 +15,16 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import * as _ from "lodash-es";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { encode } from "js-base64";
 import { atom, useAtom, useAtomValue, createStore, Provider } from "jotai";
 import * as React from "react";
 import CardDraftVersion from "./CardDraftVersion";
 
-const items =
-  "undefined" === typeof window
-    ? Promise.resolve([])
-    : (async () => {
-        const response = await fetch(`/ttfs`);
-        const { items } = await response.json();
-        return items;
-      })();
-
-const fontFamilyListAtom = atom(async (get) => {
-  return items;
-});
-
+const fontFamilyListAtom = atom();
 const fontFamilyAtom = atom("Noto Sans");
-const fontVariantListAtom = atom(async (get) => {
-  const fontFamilyList = await get(fontFamilyListAtom);
+const fontVariantListAtom = atom((get) => {
+  const fontFamilyList = get(fontFamilyListAtom);
   const fontFamily = get(fontFamilyAtom);
   const font = fontFamilyList.find((it) => it.family === fontFamily);
   return font?.variants || [];
@@ -310,13 +298,14 @@ function Content() {
   );
 }
 
-export default function DraftPage({ searchParams }) {
-  const homeStore = React.useMemo(
-    () => createStoreWith(searchParams),
-    [searchParams]
-  );
-  const pathname = usePathname();
+export default function DraftPage({ googfontAll }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const homeStore = React.useMemo(
+    () => createStoreWith(googfontAll, searchParams),
+    [googfontAll, searchParams]
+  );
   React.useEffect(() => {
     const unsub = homeStore.sub(
       urlSearchParamsAtom,
@@ -335,32 +324,33 @@ export default function DraftPage({ searchParams }) {
   );
 }
 
-function createStoreWith(searchParams) {
+function createStoreWith(googfontAll, searchParams) {
   const homeStore = createStore();
-  homeStore.set(fontFamilyAtom, searchParams.fontFamily || fontFamilyAtom.init);
+  homeStore.set(fontFamilyListAtom, googfontAll);
+  homeStore.set(fontFamilyAtom, searchParams.get("fontFamily") || fontFamilyAtom.init);
   homeStore.set(
     fontVariantAtom,
-    searchParams.fontVariant || fontVariantAtom.init
+    searchParams.get("fontVariant") || fontVariantAtom.init
   );
   // ------------------------
-  homeStore.set(imageUriAtom, searchParams.imageUri || imageUriAtom.init);
-  homeStore.set(headingAtom, searchParams.heading || headingAtom.init);
-  homeStore.set(textAtom, searchParams.text || textAtom.init);
-  homeStore.set(footerTextAtom, searchParams.footerText || footerTextAtom.init);
+  homeStore.set(imageUriAtom, searchParams.get("imageUri") || imageUriAtom.init);
+  homeStore.set(headingAtom, searchParams.get("heading") || headingAtom.init);
+  homeStore.set(textAtom, searchParams.get("text") || textAtom.init);
+  homeStore.set(footerTextAtom, searchParams.get("footerText") || footerTextAtom.init);
   // ------------------------
-  homeStore.set(cardTwAtom, searchParams.cardTw || cardTwAtom.init);
-  homeStore.set(cardBodyTwAtom, searchParams.cardBodyTw || cardBodyTwAtom.init);
-  homeStore.set(imageTwAtom, searchParams.imageTw || imageTwAtom.init);
-  homeStore.set(stackTwAtom, searchParams.stackTw || stackTwAtom.init);
-  homeStore.set(headingTwAtom, searchParams.headingTw || headingTwAtom.init);
-  homeStore.set(textTwAtom, searchParams.textTw || textTwAtom.init);
+  homeStore.set(cardTwAtom, searchParams.get("cardTw") || cardTwAtom.init);
+  homeStore.set(cardBodyTwAtom, searchParams.get("cardBodyTw") || cardBodyTwAtom.init);
+  homeStore.set(imageTwAtom, searchParams.get("imageTw") || imageTwAtom.init);
+  homeStore.set(stackTwAtom, searchParams.get("stackTw") || stackTwAtom.init);
+  homeStore.set(headingTwAtom, searchParams.get("headingTw") || headingTwAtom.init);
+  homeStore.set(textTwAtom, searchParams.get("textTw") || textTwAtom.init);
   homeStore.set(
     cardFooterTwAtom,
-    searchParams.cardFooterTw || cardFooterTwAtom.init
+    searchParams.get("cardFooterTw") || cardFooterTwAtom.init
   );
   homeStore.set(
     footerTextTwAtom,
-    searchParams.footerTextTw || footerTextTwAtom.init
+    searchParams.get("footerTextTw") || footerTextTwAtom.init
   );
   return homeStore;
 }

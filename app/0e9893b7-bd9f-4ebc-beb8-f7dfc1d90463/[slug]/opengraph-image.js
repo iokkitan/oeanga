@@ -2,7 +2,7 @@ import { decode } from "js-base64";
 import { ImageResponse } from "next/og";
 import * as React from "react";
 import { parseJson } from "../../isomorphic/utils";
-import { all } from "../../ttfs/_googlefonts";
+import { all } from "../../_server-only/googfont";
 import CardDraftVersion from "../CardDraftVersion";
 
 export const size = {
@@ -28,8 +28,8 @@ function toTwJsx(jsx) {
 }
 
 async function prepareFonts({ fontFamily, fontVariant }) {
-  const { items } = await all().then((res) => res.json());
-  const font = items.find((item) => item.family === fontFamily);
+  const googfontAll = await all();
+  const font = googfontAll.find((item) => item.family === fontFamily);
   const fileUri = font.files[fontVariant];
   const fontArrayBuffer = await fetch(new URL(fileUri)).then((res) =>
     res.arrayBuffer()

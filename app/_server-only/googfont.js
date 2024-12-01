@@ -1,6 +1,6 @@
 export async function all() {
-  if (!globalThis.googlefontsAll) {
-    globalThis.googlefontsAll = await fetch(
+  if (!globalThis.googfontAll) {
+    const response = await fetch(
       `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.GOOGLE_API_KEY}`,
       {
         headers: {
@@ -8,8 +8,10 @@ export async function all() {
         },
       }
     );
+    const { items } = await response.json();
+    globalThis.googfontAll = items;
   } else {
-    console.log("pull from globalThis.googlefontsAll");
+    console.log("pull from globalThis.googfontAll");
   }
-  return globalThis.googlefontsAll.clone();
+  return globalThis.googfontAll;
 }
